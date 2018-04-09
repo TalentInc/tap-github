@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(name='tap-github',
       version='0.5.0',
