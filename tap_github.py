@@ -53,6 +53,7 @@ def authed_get(source, url, headers={}):
         timer.tags[metrics.Tag.http_status_code] = resp.status_code
         return resp
 
+
 def authed_get_all_pages(source, url, headers={}):
     while True:
         r = authed_get(source, url, headers)
@@ -62,8 +63,10 @@ def authed_get_all_pages(source, url, headers={}):
         else:
             break
 
+
 def get_abs_path(path):
     return os.path.join(os.path.dirname(os.path.realpath(__file__)), path)
+
 
 def load_schemas():
     schemas = {}
@@ -85,13 +88,18 @@ def write_metadata(metadata, values, breadcrumb):
         }
     )
 
+
 def populate_metadata(schema, metadata, breadcrumb, key_properties):
 
     # if object, recursively populate object's 'properties'
     if 'object' in schema['type']:
         for prop_name, prop_schema in schema['properties'].items():
             prop_breadcrumb = breadcrumb + ['properties', prop_name]
-            populate_metadata(prop_schema, metadata, prop_breadcrumb, key_properties)
+            populate_metadata(
+                prop_schema,
+                metadata,
+                prop_breadcrumb,
+                key_properties)
 
     # otherwise, mark as available unless a key property, then automatic
     else:
@@ -101,6 +109,7 @@ def populate_metadata(schema, metadata, breadcrumb, key_properties):
         #inclusion = 'automatic' if prop_name in key_properties else 'available'
         values = {'inclusion': inclusion}
         write_metadata(metadata, values, breadcrumb)
+
 
 def get_catalog():
     raw_schemas = load_schemas()
@@ -117,17 +126,19 @@ def get_catalog():
             'stream': schema_name,
             'tap_stream_id': schema_name,
             'schema': schema,
-            'metadata' : metadata,
+            'metadata': metadata,
             'key_properties': KEY_PROPERTIES[schema_name],
         }
         streams.append(catalog_entry)
 
     return {'streams': streams}
 
+
 def do_discover():
     catalog = get_catalog()
     # dump catalog
     print(json.dumps(catalog, indent=2))
+
 
 def get_all_pull_requests(stream, config, state):
     '''
@@ -158,37 +169,46 @@ def get_all_pull_requests(stream, config, state):
         state[PULL_REQUESTS] = state.get(PULL_REQUESTS)
     return state
 
+
 def get_all_assignees(stream, config, state):
     '''
     https://developer.github.com/v3/issues/assignees/#list-assignees
     '''
     repo_path = config[REPOSITORY]
+    url = 'https://api.github.com/repos/{}/assignees'.format(repo_path)
     with metrics.record_counter(ASSIGNEES) as counter:
-        for response in authed_get_all_pages(ASSIGNEES, 'https://api.github.com/repos/{}/assignees'.format(repo_path)):
+        for response in authed_get_all_pages(ASSIGNEES, url):
             assignees = response.json()
             extraction_time = singer.utils.now()
             for assignee in assignees:
                 rec = singer.transform(assignee, stream)
-                singer.write_record(ASSIGNEES, rec, time_extracted=extraction_time)
+                singer.write_record(ASSIGNEES,
+                                    rec,
+                                    time_extracted=extraction_time)
                 counter.increment()
 
     return state
+
 
 def get_all_collaborators(stream, config, state):
     '''
     https://developer.github.com/v3/repos/collaborators/#list-collaborators
     '''
     repo_path = config[REPOSITORY]
+    url = 'https://api.github.com/repos/{}/collaborators'.format(repo_path)
     with metrics.record_counter(COLLABORATORS) as counter:
-        for response in authed_get_all_pages(COLLABORATORS, 'https://api.github.com/repos/{}/collaborators'.format(repo_path)):
+        for response in authed_get_all_pages(COLLABORATORS, url):
             collaborators = response.json()
             extraction_time = singer.utils.now()
             for collaborator in collaborators:
                 rec = singer.transform(collaborator, stream)
-                singer.write_record(COLLABORATORS, rec, time_extracted=extraction_time)
+                singer.write_record(COLLABORATORS,
+                                    rec,
+                                    time_extracted=extraction_time)
                 counter.increment()
 
     return state
+
 
 def get_all_commits(stream, config, state):
     '''
@@ -200,15 +220,19 @@ def get_all_commits(stream, config, state):
         query_string = '?since={}'.format(state[COMMITS])
 
     ts_state = _MIN_TS
+    url = 'https://api.github.com/repos/{}/commits{}'.format(repo_path, query_string)
     with metrics.record_counter(COMMITS) as counter:
-        for response in authed_get_all_pages(COMMITS, 'https://api.github.com/repos/{}/commits{}'.format(repo_path, query_string)):
+        for response in authed_get_all_pages(COMMITS, url):
             commits = response.json()
             extraction_time = singer.utils.now()
             for commit in commits:
-                commit_date = dateutil.parser.parse(commit['commit']['author']['date'])
+                commit_date = dateutil.parser.parse(
+                    commit['commit']['author']['date'])
                 ts_state = max(commit_date, ts_state)
                 rec = singer.transform(commit, stream)
-                singer.write_record(COMMITS, rec, time_extracted=extraction_time)
+                singer.write_record(COMMITS,
+                                    rec,
+                                    time_extracted=extraction_time)
                 counter.increment()
     try:
         ts_state = clean_tz(ts_state)
@@ -217,7 +241,8 @@ def get_all_commits(stream, config, state):
     state[COMMITS] = ts_state
     return state
 
-def get_all_issues(stream, config,  state):
+
+def get_all_issues(stream, config, state):
     '''
     https://developer.github.com/v3/issues/#list-issues-for-a-repository
     '''
@@ -236,7 +261,9 @@ def get_all_issues(stream, config,  state):
                 updated_at = dateutil.parser.parse(issue['updated_at'])
                 ts_state = max(updated_at, _MIN_TS)
                 rec = singer.transform(issue, stream)
-                singer.write_record(ISSUES, rec, time_extracted=extraction_time)
+                singer.write_record(ISSUES,
+                                    rec,
+                                    time_extracted=extraction_time)
                 counter.increment()
     try:
         state[ISSUES] = ts_state.isoformat()
@@ -244,21 +271,24 @@ def get_all_issues(stream, config,  state):
         state[ISSUES] = state.get(ISSUES)
     return state
 
+
 def get_all_stargazers(stream, config, state):
     '''
     https://developer.github.com/v3/activity/starring/#list-stargazers
     '''
     repo_path = config[REPOSITORY]
-    if STARGAZERS in state and state[STARGAZERS] is not None:
-        query_string = '&since={}'.format(state[STARGAZERS])
-    else:
-        query_string = ''
-
+    params = {'sort': 'updated',
+              'direction': 'asc'}
+    if state.get(STARGAZERS):
+        params['since'] = state[STARGAZERS]
+    query = urllib.parse.urlencode(params)
     stargazers_headers = {'Accept': 'application/vnd.github.v3.star+json'}
+    url = 'https://api.github.com/repos/{}/stargazers?{}'.format(repo_path,
+                                                                 query)
     ts_state = _MIN_TS
     with metrics.record_counter(STARGAZERS) as counter:
-        url = 'https://api.github.com/repos/{}/stargazers?sort=updated&direction=asc{}'.format(repo_path, query_string)
-        for response in authed_get_all_pages(STARGAZERS, url, stargazers_headers):
+        for response in authed_get_all_pages(
+                STARGAZERS, url, stargazers_headers):
             stargazers = response.json()
             extraction_time = singer.utils.now()
             for stargazer in stargazers:
@@ -266,13 +296,15 @@ def get_all_stargazers(stream, config, state):
                 ts_state = max(starred_at, ts_state)
                 rec = singer.transform(stargazer, stream)
                 rec['user_id'] = rec['user']['id']
-                singer.write_record(STARGAZERS, rec, time_extracted=extraction_time)
+                singer.write_record(
+                    STARGAZERS, rec, time_extracted=extraction_time)
                 counter.increment()
     try:
         state[STARGAZERS] = ts_state.isoformat()
     except UnboundLocalError:
         state[STARGAZERS] = state.get(STARGAZERS)
     return state
+
 
 def get_selected_streams(catalog):
     '''
@@ -288,11 +320,11 @@ def get_selected_streams(catalog):
         else:
             for entry in stream_metadata:
                 # stream metadata will have empty breadcrumb
-                if not entry['breadcrumb'] and entry['metadata'].get('selected',None):
+                if not entry['breadcrumb'] and entry['metadata'].get(
+                        'selected', None):
                     selected_streams.append(stream['tap_stream_id'])
 
     return selected_streams
-
 
 
 SYNC_FUNCTIONS = {
@@ -303,6 +335,7 @@ SYNC_FUNCTIONS = {
     PULL_REQUESTS: get_all_pull_requests,
     STARGAZERS: get_all_stargazers
 }
+
 
 def do_sync(config, state, catalog):
     access_token = config[ACCESS_TOKEN]
@@ -328,6 +361,7 @@ def do_sync(config, state, catalog):
 
     singer.write_state(state)
 
+
 @singer.utils.handle_top_exception(logger)
 def main():
     args = singer.utils.parse_args(REQUIRED_CONFIG_KEYS)
@@ -336,6 +370,7 @@ def main():
     else:
         catalog = args.properties if args.properties else get_catalog()
         do_sync(args.config, args.state, catalog)
+
 
 if __name__ == '__main__':
     main()
