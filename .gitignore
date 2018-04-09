@@ -92,3 +92,6 @@ ENV/
 config.json
 
 *~
+
+# Singer Tap state file
+.state.json
