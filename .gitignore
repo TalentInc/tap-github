@@ -88,4 +88,10 @@ ENV/
 # Rope project settings
 .ropeproject
 
+# Singer configuration file
+config.json
+
 *~
+
+# Singer Tap state file
+.state.json

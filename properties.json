@@ -1,0 +1,806 @@
+{
+  "streams": [
+    {
+      "stream": "pull_requests",
+      "tap_stream_id": "pull_requests",
+      "schema": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false,
+        "selected": true,
+        "properties": {
+          "id": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "url": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "number": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "state": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "title": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "body": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "created_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "metadata": [
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "id"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "url"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "number"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "state"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "title"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "body"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "created_at"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "updated_at"
+          ]
+        }
+      ],
+      "key_properties": [
+        "id"
+      ]
+    },
+    {
+      "stream": "commits",
+      "tap_stream_id": "commits",
+      "schema": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false,
+        "selected": true,
+        "properties": {
+          "sha": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The git commit hash"
+          },
+          "url": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "parents": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "type": [
+                "null",
+                "object"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "sha": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "The git hash of the parent commit"
+                },
+                "url": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "The URL to the parent commit"
+                },
+                "html_url": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "The HTML URL to the parent commit"
+                }
+              }
+            }
+          },
+          "html_url": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The HTML URL to the commit"
+          },
+          "comments_url": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The URL to the commit's comments page"
+          },
+          "commit": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "url": {
+                "type": [
+                  "null",
+                  "string"
+                ],
+                "description": "The URL to the commit"
+              },
+              "tree": {
+                "type": [
+                  "null",
+                  "object"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "sha": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "url": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                }
+              },
+              "author": {
+                "type": [
+                  "null",
+                  "object"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "date": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "format": "date-time",
+                    "description": "The date the author committed the change"
+                  },
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "description": "The author's name"
+                  },
+                  "email": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "description": "The author's email"
+                  }
+                }
+              },
+              "message": {
+                "type": [
+                  "null",
+                  "string"
+                ],
+                "description": "The commit message"
+              },
+              "committer": {
+                "type": [
+                  "null",
+                  "object"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "date": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "format": "date-time",
+                    "description": "The date the committer committed the change"
+                  },
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "description": "The committer's name"
+                  },
+                  "email": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "description": "The committer's email"
+                  }
+                }
+              },
+              "comment_count": {
+                "type": [
+                  "null",
+                  "integer"
+                ],
+                "description": "The number of comments on the commit"
+              }
+            }
+          }
+        }
+      },
+      "metadata": [
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "sha"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "url"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "parents"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "html_url"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "comments_url"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "commit",
+            "properties",
+            "url"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "commit",
+            "properties",
+            "tree",
+            "properties",
+            "sha"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "commit",
+            "properties",
+            "tree",
+            "properties",
+            "url"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "commit",
+            "properties",
+            "author",
+            "properties",
+            "date"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "commit",
+            "properties",
+            "author",
+            "properties",
+            "name"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "commit",
+            "properties",
+            "author",
+            "properties",
+            "email"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "commit",
+            "properties",
+            "message"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "commit",
+            "properties",
+            "committer",
+            "properties",
+            "date"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "commit",
+            "properties",
+            "committer",
+            "properties",
+            "name"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "commit",
+            "properties",
+            "committer",
+            "properties",
+            "email"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "commit",
+            "properties",
+            "comment_count"
+          ]
+        }
+      ],
+      "key_properties": [
+        "sha"
+      ]
+    },
+    {
+      "stream": "stargazers",
+      "tap_stream_id": "stargazers",
+      "schema": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false,
+        "selected": true,
+        "properties": {
+          "user": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": [
+                  "null",
+                  "integer"
+                ]
+              }
+            }
+          },
+          "starred_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "user_id": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          }
+        }
+      },
+      "metadata": [
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "user",
+            "properties",
+            "id"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "starred_at"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "user_id"
+          ]
+        }
+      ],
+      "key_properties": [
+        "user_id"
+      ]
+    },
+    {
+      "stream": "issues",
+      "tap_stream_id": "issues",
+      "schema": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false,
+        "selected": true,
+        "properties": {
+          "id": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "updated_at": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "metadata": [
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "id"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "updated_at"
+          ]
+        }
+      ],
+      "key_properties": [
+        "id"
+      ]
+    },
+    {
+      "stream": "assignees",
+      "tap_stream_id": "assignees",
+      "schema": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false,
+        "selected": true,
+        "properties": {
+          "login": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "id": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "url": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "metadata": [
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "login"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "id"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "url"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "type"
+          ]
+        }
+      ],
+      "key_properties": [
+        "id"
+      ]
+    },
+    {
+      "stream": "collaborators",
+      "tap_stream_id": "collaborators",
+      "schema": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false,
+        "selected": true,
+        "properties": {
+          "login": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "id": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "url": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "metadata": [
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "login"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "id"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "url"
+          ]
+        },
+        {
+          "metadata": {
+            "inclusion": "automatic"
+          },
+          "breadcrumb": [
+            "properties",
+            "type"
+          ]
+        }
+      ],
+      "key_properties": [
+        "id"
+      ]
+    }
+  ]
+}
